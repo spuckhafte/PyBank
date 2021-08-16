@@ -16,37 +16,22 @@ important = []
 
 
 #class start_backend:
-    
-
 #    def __init__(self, start_time, key):
 #        self.start_time = start_time
 #        self.key = key
-
-
 #    def return_time(self):
 #        return self.start_time
-
-
 #    def return_key(self):
 #        return self.key
 
-
 #class notification(start_backend):
-
-
 #    def __init__(self, end_time):
 #        self.end_time = end_time
-
-
 #    start_it = start_backend.return_time(self)
 #    key = start_backend.return_key(self)
-
-    
 #    def interface(self, start_it, key):
 #        end_it = self.end_time
 
-        
-        
 
 def start():
     while True:
