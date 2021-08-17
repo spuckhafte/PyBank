@@ -218,6 +218,8 @@ def add_account():
                     sheet.cell(key, 2).value = int(new_phone)
                     sheet.cell(key, 3).value = new_pin
                     sheet.cell(key, 4).value = 0
+                    
+                    sheet.cell(key, 5).value = sheet.cell(key, 6).value = 0
 
                     user_log = f"Accounted Created: {date_time()}"
                     sheet.cell(key, max_col_row(key) + 3).value = user_log
