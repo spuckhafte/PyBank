@@ -15,22 +15,39 @@ index = {
 important = []
 
 
-#class start_backend:
-#    def __init__(self, start_time, key):
-#        self.start_time = start_time
-#        self.key = key
-#    def return_time(self):
-#        return self.start_time
-#    def return_key(self):
-#        return self.key
+notification_condition = False
+log = "Check Logs         (3)"
+log2 = "LOGS: "
 
-#class notification(start_backend):
-#    def __init__(self, end_time):
-#        self.end_time = end_time
-#    start_it = start_backend.return_time(self)
-#    key = start_backend.return_key(self)
-#    def interface(self, start_it, key):
-#        end_it = self.end_time
+
+class Notification:
+
+    def __init__(self, mes1, mes2, check, key):
+        self.mes1 = mes1
+        self.mes2 = mes2
+        self.check = check
+        self.key = key
+
+    def edit_outer_text(self):
+
+        popups = int(sheet.cell(self.key, 6).value) - int(sheet.cell(self.key, 5).value)
+        if popups > 0 and self.check is not True:
+            self.mes1 = f"Check Logs ({popups} new)  (3)"
+            return self.mes1
+
+        else:
+            self.mes1 = "Check Logs         (3)"
+            return self.mes1
+
+    def edit_inner_text(self):
+        popups = int(sheet.cell(self.key, 6).value) - int(sheet.cell(self.key, 5).value)
+        if popups > 0 and self.check is not True:
+            self.mes2 = f"LOGS (check from- {sheet.cell(self.key, 5).value - 5})"
+            return self.mes2
+
+        else:
+            self.mes2 = "LOGS: "
+            return self.mes2
 
 
 def start():
@@ -108,6 +125,8 @@ def login():
 
             key = int(password.split('-').pop(0))
 
+            sheet.cell(key, 6).value = max_col_row(key)
+
             user_log = f"Logged in: {date_time()}"
             sheet.cell(key, max_col_row(key) + 1).value = user_log
             wb.save('Database.xlsx')
@@ -132,10 +151,6 @@ def login():
                 break
             else:
                 continue
-
-
-def dummy_logout():
-    return date_time()
 
 
 def add_account():
@@ -191,7 +206,7 @@ def add_account():
                     return
                 if new_pin_suffix == new_pin_suffix_again:
                     key = sheet.max_row + 1
-                    new_pin = str(key)+'-'+new_pin_suffix
+                    new_pin = str(key) + '-' + new_pin_suffix
                     time.sleep(0.8)
                     print(f'\nYour new pin is: {new_pin}')
                     time.sleep(0.8)
@@ -205,7 +220,7 @@ def add_account():
                     sheet.cell(key, 4).value = 0
 
                     user_log = f"Accounted Created: {date_time()}"
-                    sheet.cell(key, max_col_row(key) + 1).value = user_log
+                    sheet.cell(key, max_col_row(key) + 3).value = user_log
 
                     wb.save('Database.xlsx')
                     print('\nAccount Added!')
@@ -238,7 +253,7 @@ def delete_account(key, pin):
         if del_pass == pin:
             warn = input('Are you sure, your account will be permanently deleted: ').lower()
             if 'y' in warn:
-                for column in range(1, max_col_row(key)+1):
+                for column in range(1, max_col_row(key) + 1):
                     sheet.cell(key, column).value = None
                 wb.save('Database.xlsx')
                 time.sleep(0.8)
@@ -329,7 +344,7 @@ def transfer_money(key):
 
         target_row = 1
         condition = False
-        for cell in range(2, sheet.max_row+1):
+        for cell in range(2, sheet.max_row + 1):
             target_row += 1
             phone = sheet.cell(cell, 2).value
             if int(phone) == int(target_phone):
@@ -374,8 +389,9 @@ def transfer_money(key):
 
                 while True:
                     time.sleep(0.8)
-                    confirm = input(f'\nAre you sure, Rs.{str(transfer_amount)} will be transferred to an account linked '
-                                    f'to the phone number {target_phone}: ')
+                    confirm = input(
+                        f'\nAre you sure, Rs.{str(transfer_amount)} will be transferred to an account linked '
+                        f'to the phone number {target_phone}: ')
 
                     if confirm_response(confirm):
                         sheet.cell(target_row, 4).value += transfer_amount
@@ -474,11 +490,12 @@ keyword = int(userpin.split('-').pop(0))
 
 print(f"\nWelcome to the PyBank, {clientname.upper()}\n")
 while True:
+    log2 = Notification(mes1=log, mes2=log2, check=notification_condition, key=keyword).edit_outer_text()
     time.sleep(0.4)
-    print('''Contents:
+    print(f'''Contents:
     Check Details      (1)
     Transfer Money     (2)
-    Check Logs         (3)
+    {log2}
     Deposit Money      (4)
     Change Pin         (pin)
     Delete Account     (del)
@@ -494,12 +511,19 @@ while True:
         transfer_money(keyword)
 
     elif user_input == "3":
-        print('\nLOGS:')
-        time.sleep(0.5)
-        for i in range(5, max_col_row(keyword) + 1):
-            print(f'{i-4}- {sheet.cell(keyword, i).value}')
+        log = Notification(mes1=log, mes2=log2, check=notification_condition, key=keyword).edit_inner_text()
+        print(f'\n{log}')
+        if notification_condition is not True:
+            time.sleep(1.5)
+        else:
+            time.sleep(0.8)
+        for i in range(7, max_col_row(keyword) + 1):
+            print(f'{i - 6}- {sheet.cell(keyword, i).value}')
+        notification_condition = True
+
+        cont = input('Enter any key to continue: ')
         print()
-        time.sleep(0.6)
+        time.sleep(0.2)
 
     elif user_input == "4":
         deposit(keyword)
@@ -514,7 +538,11 @@ while True:
     elif user_input == "out":
         time.sleep(0.5)
         print('\nThank you for visiting us!')
-        off_time = dummy_logout()
+
+        sheet.cell(keyword, 5).value = max_col_row(keyword)
+        wb.save('Database.xlsx')
+        notification_condition = False
+
         break
 
     elif user_input == "stop":
