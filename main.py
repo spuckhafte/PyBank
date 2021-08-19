@@ -99,9 +99,9 @@ def max_col_row(row):
 
 
 def confirm_response(user_response):
-    if 'y' in user_response:
+    if 'y' == user_response[0]:
         return True
-    if 'n' in user_response:
+    if 'n' == in user_response[0]:
         return False
 
 
