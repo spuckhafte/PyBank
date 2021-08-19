@@ -101,7 +101,7 @@ def max_col_row(row):
 def confirm_response(user_response):
     if 'y' == user_response[0]:
         return True
-    if 'n' == in user_response[0]:
+    if 'n' == user_response[0]:
         return False
 
 
@@ -300,20 +300,32 @@ def deposit(key):
                     time.sleep(0.8)
                     print('Money deposited, check Logs!\n')
 
+                    sheet.cell(keyword, 5).value = max_col_row(keyword)
+
                     user_balance = sheet.cell(key, 4).value
                     user_log = f"Amount Deposited: Rs.{dep_amount}; Your Balance: Rs.{user_balance}; On: {date_time()}"
                     sheet.cell(key, max_col_row(key) + 1).value = user_log
+
+                    sheet.cell(key, 6).value = max_col_row(key)
+                    pop_condition = False
+                    
                     wb.save('Database.xlsx')
-                    return
+                    return pop_condition
 
                 elif not confirm_response(confirm):
                     time.sleep(0.8)
                     print('Deposit Cancelled\n')
 
+                    sheet.cell(keyword, 5).value = max_col_row(keyword)
+
                     user_log = f"Deposit Failed: {date_time()}"
                     sheet.cell(key, max_col_row(key) + 1).value = user_log
+
+                    sheet.cell(key, 6).value = max_col_row(key)
+                    pop_condition = False
+                    
                     wb.save('Database.xlsx')
-                    return
+                    return pop_condition
                 else:
                     time.sleep(0.8)
                     print('\nWrong input, Try again!')
@@ -411,23 +423,34 @@ def transfer_money(key):
                         username = sheet.cell(key, 1).value
                         userphone = sheet.cell(key, 2).value
 
+                        sheet.cell(keyword, 5).value = max_col_row(keyword)
+
                         user_log = f"Amount transferred: Rs.{transfer_amount}; Target phone no.: {target_phone}; Your Balance: Rs.{user_balance}; On: {datetime}"
                         target_log = f"Amount received: Rs.{transfer_amount}; From: {username}({userphone}); Your Balance: Rs.{target_balance}; On: {datetime}"
 
                         sheet.cell(key, max_col_row(key) + 1).value = user_log
                         sheet.cell(target_row, max_col_row(target_row) + 1).value = target_log
 
+                        sheet.cell(key, 6).value = max_col_row(key)
+                        pop_condition = False
+
                         wb.save('Database.xlsx')
-                        return
+                        return pop_condition
 
                     elif not confirm_response(confirm):
                         time.sleep(0.8)
                         print('Transaction Failed!\n')
 
+                        sheet.cell(keyword, 5).value = max_col_row(keyword)
+
                         user_log = f"Transaction Failed: {date_time()}"
                         sheet.cell(key, max_col_row(key) + 1).value = user_log
+
+                        sheet.cell(key, 6).value = max_col_row(key)
+                        pop_condition = False
+                    
                         wb.save('Database.xlsx')
-                        return
+                        return pop_condition
                     else:
                         time.sleep(0.8)
                         print('Wrong input, Try again!\n')
@@ -466,13 +489,19 @@ def change_password(pin, key):
             if new_pass == new_pass_again:
                 sheet.cell(key, 3).value = str(key) + '-' + new_pass
 
+                sheet.cell(keyword, 5).value = max_col_row(keyword)
+
                 user_log = f"Pin changed: from- {old_pass}, to- {sheet.cell(key, 3).value}; On: {date_time()}"
                 sheet.cell(key, max_col_row(key) + 1).value = user_log
+
+                sheet.cell(key, 6).value = max_col_row(key)
+                pop_condition = False
+                
                 wb.save('Database.xlsx')
 
                 time.sleep(0.8)
                 print(f'\nNew Pin: {sheet.cell(key, 3).value}\n')
-                break
+                return pop_condition
             else:
                 time.sleep(0.8)
                 print("Pins doesn't match, Try Again!\n")
@@ -510,7 +539,7 @@ while True:
         user_details(keyword)
 
     elif user_input == "2":
-        transfer_money(keyword)
+        notification_condition = transfer_money(keyword)
 
     elif user_input == "3":
         log = Notification(mes1=log, mes2=log2, check=notification_condition, key=keyword).edit_inner_text()
@@ -528,10 +557,10 @@ while True:
         time.sleep(0.2)
 
     elif user_input == "4":
-        deposit(keyword)
+        notification_condition = deposit(keyword)
 
     elif user_input == "pin":
-        change_password(userpin, keyword)
+        notification_condition = change_password(userpin, keyword)
 
     elif user_input == "del":
         delete_account(keyword, userpin)
