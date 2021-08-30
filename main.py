@@ -141,7 +141,7 @@ def login():
                     add_account()
                     check = True
                     break
-                elif not confirm_respons(res):
+                elif not confirm_response(res):
                     break
                 else:
                     print('Wrong Input, Try again!\n')
@@ -161,14 +161,14 @@ def add_account():
         if new_name == "stop":
             print('terminate\n')
             time.sleep(0.8)
-            login()
+            start()
             return
 
         new_phone = input('Enter Phone Number: ')
         if new_phone == "stop":
             print('terminate\n')
             time.sleep(0.8)
-            login()
+            start()
             return
         try:
             phone_list = []
@@ -193,7 +193,7 @@ def add_account():
             if new_pin_suffix == "stop":
                 print('terminate\n')
                 time.sleep(0.8)
-                login()
+                start()
                 return
 
             if len(new_pin_suffix) == 4:
@@ -202,7 +202,7 @@ def add_account():
                 if new_pin_suffix_again == "stop":
                     print('terminate\n')
                     time.sleep(0.8)
-                    login()
+                    start()
                     return
                 if new_pin_suffix == new_pin_suffix_again:
                     key = sheet.max_row + 1
