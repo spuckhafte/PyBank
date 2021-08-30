@@ -4,5 +4,5 @@
 3. Excel-sheet is used as database
 
 **IMPORTANT: Do not open the excel sheet while running the program, it won't work!**
-<br>
+<br><br>
 I think this is 'my' best Python program ever, and it reflects all the knowledge I have of this language
