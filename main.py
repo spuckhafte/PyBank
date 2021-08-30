@@ -137,11 +137,11 @@ def login():
             time.sleep(0.8)
             while True:
                 res = input('Do you want to make a new account for your self: ').lower()
-                if 'y' in res:
+                if confirm_response(res):
                     add_account()
                     check = True
                     break
-                elif 'n' in res:
+                elif not confirm_respons(res):
                     break
                 else:
                     print('Wrong Input, Try again!\n')
@@ -257,14 +257,14 @@ def delete_account(key, pin):
 
         if del_pass == pin:
             warn = input('Are you sure, your account will be permanently deleted: ').lower()
-            if 'y' in warn:
+            if confirm_response(warn):
                 for column in range(1, max_col_row(key) + 1):
                     sheet.cell(key, column).value = None
                 wb.save('Database.xlsx')
                 time.sleep(0.8)
                 add_account()
                 break
-            elif 'n' in warn:
+            elif not confirm_response(warn):
                 break
             else:
                 time.sleep(0.8)
