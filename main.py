@@ -574,8 +574,6 @@ while True:
 
         sheet.cell(keyword, 5).value = max_col_row(keyword)
         wb.save('Database.xlsx')
-        notification_condition = False
-
         break
 
     elif user_input == "stop":
