@@ -219,7 +219,7 @@ def add_account():
                     sheet.cell(key, 3).value = new_pin
                     sheet.cell(key, 4).value = 0
                     
-                    sheet.cell(key, 5).value = 0
+                    sheet.cell(key, 5).value = max_col_row(key) + 2
                     sheet.cell(key, 6).value = 0
 
                     user_log = f"Accounted Created: {date_time()}"
