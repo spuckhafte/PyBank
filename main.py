@@ -31,7 +31,7 @@ class Notification:
     def edit_outer_text(self):
 
         popups = int(sheet.cell(self.key, 6).value) - int(sheet.cell(self.key, 5).value)
-        if popups > 0 and self.check is False and self.check is not None:
+        if popups > 0 and self.check is False:
             self.mes1 = f"Check Logs ({popups} new)  (3)"
             return self.mes1
 
@@ -41,7 +41,7 @@ class Notification:
 
     def edit_inner_text(self):
         popups = int(sheet.cell(self.key, 6).value) - int(sheet.cell(self.key, 5).value)
-        if popups > 0 and self.check is False and self.check is not None:
+        if popups > 0 and self.check is False:
             self.mes2 = f"LOGS (check from- {sheet.cell(self.key, 5).value - 5})"
             return self.mes2
 
