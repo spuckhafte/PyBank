@@ -31,7 +31,7 @@ class Notification:
     def edit_outer_text(self):
 
         popups = int(sheet.cell(self.key, 6).value) - int(sheet.cell(self.key, 5).value)
-        if popups > 0 and self.check is not True:
+        if popups > 0 and self.check is False and self.check is not None:
             self.mes1 = f"Check Logs ({popups} new)  (3)"
             return self.mes1
 
@@ -41,7 +41,7 @@ class Notification:
 
     def edit_inner_text(self):
         popups = int(sheet.cell(self.key, 6).value) - int(sheet.cell(self.key, 5).value)
-        if popups > 0 and self.check is not True:
+        if popups > 0 and self.check is False and self.check is not None:
             self.mes2 = f"LOGS (check from- {sheet.cell(self.key, 5).value - 5})"
             return self.mes2
 
@@ -283,7 +283,7 @@ def deposit(key):
         if password == "stop":
             print('terminate\n')
             time.sleep(0.8)
-            return
+            return notification_condition
         if check_password(password):
             while True:
                 try:
@@ -291,7 +291,7 @@ def deposit(key):
                     if str(dep_amount) == "stop":
                         print('terminate!\n')
                         time.sleep(0.8)
-                        return
+                        return notification_condition
                 except:
                     time.sleep(0.8)
                     print('Format of the amount is wrong, Try again!\n')
@@ -303,7 +303,8 @@ def deposit(key):
                     time.sleep(0.8)
                     print('Money deposited, check Logs!\n')
 
-                    sheet.cell(keyword, 5).value = max_col_row(keyword)
+                    if notification_condition is True:
+                        sheet.cell(keyword, 5).value = max_col_row(keyword)
 
                     user_balance = sheet.cell(key, 4).value
                     user_log = f"Amount Deposited: Rs.{dep_amount}; Your Balance: Rs.{user_balance}; On: {date_time()}"
@@ -319,7 +320,8 @@ def deposit(key):
                     time.sleep(0.8)
                     print('Deposit Cancelled\n')
 
-                    sheet.cell(keyword, 5).value = max_col_row(keyword)
+                    if notification_condition is True:
+                        sheet.cell(keyword, 5).value = max_col_row(keyword)
 
                     user_log = f"Deposit Failed: {date_time()}"
                     sheet.cell(key, max_col_row(key) + 1).value = user_log
@@ -347,7 +349,7 @@ def transfer_money(key):
             if target_phone == "stop":
                 print('terminate!\n')
                 time.sleep(0.8)
-                return
+                return notification_condition
             int(target_phone)
         except:
             time.sleep(0.8)
@@ -386,7 +388,7 @@ def transfer_money(key):
             if pin == "stop":
                 print('terminate!\n')
                 time.sleep(0.8)
-                return
+                return notification_condition
 
             if check_password(pin):
                 try:
@@ -394,7 +396,7 @@ def transfer_money(key):
                     if transfer_amount == "stop":
                         print('terminate!\n')
                         time.sleep(0.8)
-                        return
+                        return notification_condition
                     if transfer_amount > sheet.cell(key, 4).value or transfer_amount <= 0:
                         time.sleep(0.8)
                         print('Invalid amount, Try again!\n')
@@ -425,7 +427,8 @@ def transfer_money(key):
                         username = sheet.cell(key, 1).value
                         userphone = sheet.cell(key, 2).value
 
-                        sheet.cell(keyword, 5).value = max_col_row(keyword)
+                        if notification_condition is True:
+                            sheet.cell(keyword, 5).value = max_col_row(keyword)
 
                         user_log = f"Amount transferred: Rs.{transfer_amount}; Target phone no.: {target_phone}; Your Balance: Rs.{user_balance}; On: {datetime}"
                         target_log = f"Amount received: Rs.{transfer_amount}; From: {username}({userphone}); Your Balance: Rs.{target_balance}; On: {datetime}"
@@ -443,7 +446,8 @@ def transfer_money(key):
                         time.sleep(0.8)
                         print('Transaction Failed!\n')
 
-                        sheet.cell(keyword, 5).value = max_col_row(keyword)
+                        if notification_condition is True:
+                            sheet.cell(keyword, 5).value = max_col_row(keyword)
 
                         user_log = f"Transaction Failed: {date_time()}"
                         sheet.cell(key, max_col_row(key) + 1).value = user_log
@@ -468,7 +472,7 @@ def change_password(pin, key):
         if old_pass == "stop":
             print('terminate!\n')
             time.sleep(0.8)
-            return
+            return notification_condition
         if old_pass == pin:
             break
         else:
@@ -481,17 +485,18 @@ def change_password(pin, key):
         if new_pass == "stop":
             print('terminate!\n')
             time.sleep(0.8)
-            return
+            return notification_condition
         if type(int(new_pass)) == int and len(new_pass) == 4:
             new_pass_again = input('Confirm the new pin: ')
             if new_pass_again == "stop":
                 print('terminate!\n')
                 time.sleep(0.8)
-                return
+                return notification_condition
             if new_pass == new_pass_again:
                 sheet.cell(key, 3).value = str(key) + '-' + new_pass
 
-                sheet.cell(keyword, 5).value = max_col_row(keyword)
+                if notification_condition is True:
+                    sheet.cell(keyword, 5).value = max_col_row(keyword)
 
                 user_log = f"Pin changed: from- {old_pass}, to- {sheet.cell(key, 3).value}; On: {date_time()}"
                 sheet.cell(key, max_col_row(key) + 1).value = user_log
@@ -572,7 +577,9 @@ while True:
         time.sleep(0.5)
         print('\nThank you for visiting us!')
 
-        sheet.cell(keyword, 5).value = max_col_row(keyword)
+        if notification_condition is True:
+            sheet.cell(keyword, 5).value = max_col_row(keyword)
+
         wb.save('Database.xlsx')
         break
 
