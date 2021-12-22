@@ -5,7 +5,7 @@
 
 **IMPORTANT: Do not open the excel sheet while running the program, it won't work!**
 <br><br>
-***9/21 or 10/21**I think this is 'my' best Python program ever, and it reflects all the knowledge I have of this language*
+***9/21 or 10/21: **I think this is 'my' best Python program ever, and it reflects all the knowledge I have of this language*
 
 # Bug Fixes and Updates
 <kbd>03/10/21</kbd>
