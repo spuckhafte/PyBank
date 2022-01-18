@@ -79,10 +79,11 @@ def date_time():
     return datetime
 
 
-def check_password(pin):
+def check_password(pin, name):
     for row in range(2, sheet.max_row + 1):
-        data_pins = sheet.cell(row, 3).value
-        if pin == data_pins:
+        data_pin = sheet.cell(row, 3).value
+        data_name = sheet.cell(row, 1).value
+        if pin == data_pin and name == data_name:
             return True
         if row == sheet.max_row:
             return False
@@ -119,7 +120,7 @@ def login():
         username = input('Enter name: ').upper()
         password = input('Enter pin: ').upper()
 
-        if check_name(username) and check_password(password):
+        if check_name(username) and check_password(password, username):
             important.append(username)
             important.append(password)
 
@@ -284,7 +285,8 @@ def deposit(key):
             print('terminate\n')
             time.sleep(0.8)
             return notification_condition
-        if check_password(password):
+        name = sheet.cell(key, 1).value
+        if check_password(password, name):
             while True:
                 try:
                     dep_amount = int(input('Enter the amount to be deposit: Rs.'))
@@ -376,8 +378,7 @@ def transfer_money(key):
             time.sleep(0.8)
             print("The phone number doesn't match to any account, Try again!\n")
             continue
-
-        if target_phone == sheet.cell(key, 2).value:
+        if target_phone == str(sheet.cell(key, 2).value):
             time.sleep(0.8)
             print("You can't transfer money to yourself, Try again!\n")
             continue
@@ -390,7 +391,7 @@ def transfer_money(key):
                 time.sleep(0.8)
                 return notification_condition
 
-            if check_password(pin):
+            if check_password(pin, sheet.cell(key, 1).value):
                 try:
                     transfer_amount = int(input('Enter the amount to be transferred: Rs.'))
                     if transfer_amount == "stop":
